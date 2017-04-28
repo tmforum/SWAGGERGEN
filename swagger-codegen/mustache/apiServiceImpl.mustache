@@ -1,0 +1,39 @@
+package impl.{{package}};
+
+import {{package}}.*;
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+
+import javax.interceptor.Interceptors;
+import javax.ejb.Stateless;
+
+import javax.ejb.EJB;
+
+import com.infy.cache.util.CacheRequestContext;
+import com.infy.cache.util.CacheProperty;
+import com.infy.resilience.interceptor.ResilienceCommandInterceptor;
+import com.infy.cache.interceptor.CacheServiceInterceptor;
+import com.infy.api.service.CustomersApiServiceRouter;
+import com.infy.api.util.APIContext;
+
+{{>generatedAnnotation}}
+{{#operations}}
+@Stateless
+public class {{classname}}ServiceImpl implements {{classname}}Service {
+  {{#operation}}
+	
+	  @EJB
+	  private CustomersApiServiceRouter router;
+	  
+	  @Interceptors({ResilienceCommandInterceptor.class, CacheServiceInterceptor.class})
+	  @CacheProperty(responseType = {{{returnType}}}.class)
+      @Override
+      public Object {{nickname}}(APIContext context,CacheRequestContext cacheRequestContext)
+      throws Exception {
+      return router.process("{{nickname}}",context);
+  }
+  {{/operation}}
+}
+{{/operations}}

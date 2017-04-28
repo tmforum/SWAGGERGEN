@@ -1,0 +1,15 @@
+package {{package}};
+
+import com.infy.api.util.APIContext;
+
+import com.infy.cache.util.CacheRequestContext;
+
+{{>generatedAnnotation}}
+{{#operations}}
+public interface {{classname}}Service {
+  {{#operation}}
+      public Object {{nickname}}(APIContext context,CacheRequestContext cacheRequestContext)
+      throws Exception;
+  {{/operation}}
+}
+{{/operations}}
